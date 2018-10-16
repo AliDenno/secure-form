@@ -24,8 +24,13 @@ Datei Inhalt:
 
 
 Resources:
+
 https://github.com/openpgpjs/openpgpjs#lookup-public-key-on-hkp-server
+
 https://scotthelme.co.uk/creating-a-pgp-contact-form/
+
 https://aaronhorler.com/articles/openpgpjs.html
+
 https://blog.castiel.me/posts/2016-11-16-play-with-cryptography-with-openpgpjs/
+
 https://github.com/eligrey/FileSaver.js
