@@ -20,8 +20,7 @@
   
     div {
         width: 600px;
-        float:left;
-        margin-left: 40px;
+        margin:10px auto;
         padding: 50px;
         background-color: #fff;
         border-radius: 1em;
