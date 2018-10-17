@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>Encryption Example</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css">
+    <script>
+</script>   
+</head>
+<body>
+<div>
+<h2>Encrypt text</h2>
+<button id="encryptText" type="button">Encrypt</button><br/>
+<textarea id="encryptTextArea" rows="4" cols="50"></textarea>
+<br/>
+<button id="decryptText" type="button">decrypt</button><br/>
+<textarea id="decryptTextArea" rows="4" cols="50"></textarea>
+<br/>
+</div>
+<div>
+<h2>Encrypt Attachement</h2>
+<input style="float:right; " type='file'  onchange='openFile(event)'><br>
+<button id="encryptAttachement" type="button">Encrypt</button><br/>
+<textarea id="encryptAttachementTextArea" rows="4" cols="50"></textarea>
+<br/>
+<button id="decryptAttachement" type="button">decrypt</button><br/>
+<textarea id="decryptAttachementTextArea" rows="4" cols="50"></textarea>
+<br/>
+</div>
+</body>
+<script src="../Js/openpgp.min.js"></script>
+<script src="../Js/decryptText.js"></script>
+<script src="../Js/encryptText.js"></script>
+<script src="../Js/decryptAttachment.js"></script>
+<script src="../Js/encryptAttachment.js"></script>
+</html>
