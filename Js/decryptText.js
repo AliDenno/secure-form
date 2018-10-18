@@ -121,7 +121,6 @@ const decryptMessage  = async() => {
       const privKeyObj = (await openpgp.key.readArmored(privateKeyString)).keys[0]
       await privKeyObj.decrypt(passphrase)
 
-      // Text and private key should be added here 
       var options = {
         message: await openpgp.message.readArmored(document.getElementById("decryptTextArea").value),
         privateKeys: [privKeyObj]
@@ -142,3 +141,4 @@ const decryptMessage  = async() => {
   }
 }
 document.getElementById("decryptText").addEventListener("click", decryptMessage);
+

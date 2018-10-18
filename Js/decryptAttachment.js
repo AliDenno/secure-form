@@ -116,9 +116,11 @@ const decryptAttachement  = async() => {
             WYh6IO6wtY5+iVCQIA==
             =nkEk
             -----END PGP PRIVATE KEY BLOCK-----`;
+
       const passphrase = `super long and hard to guess secret`;
-      const privKeyObj = (await openpgp.key.read(privateKeyString)).keys[0]
-      //await privKeyObj.decrypt(passphrase)
+      const privKeyObj = (await openpgp.key.readArmored(privateKeyString)).keys[0]
+      await privKeyObj.decrypt(passphrase)
+
       var options = {
         message: await openpgp.message.readArmored(document.getElementById("decryptAttachementTextArea").value),
         privateKeys: [privKeyObj],
@@ -139,3 +141,7 @@ const decryptAttachement  = async() => {
   }
 }
 document.getElementById("decryptAttachement").addEventListener("click", decryptAttachement);
+
+
+
+
