@@ -3,18 +3,22 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>How to Get Form Field Data as JSON Using Plain JavaScript</title>
+  <title>Secure Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Lato:300|Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="../css/styleForm.css">
 </head>
 <body>
+<div class="overlay">
+  <div id="loading-img"></div>
+</div>
+
 <section class="content">
-  <h1 class="content__heading">Send Me a Message</h1>
-  <p class="content__lede">Use this handy contact form to get in touch with me.</p>
+  <h1 class="content__heading">Send a Message</h1>
+  <p class="content__lede">Use this form to send encrypted data</p>
   <form class="content__form contact-form">
     <div class="testing">
-      <p>Does this do anything?</p>
+      <p>Fill the following:</p>
     </div>
     <div class="contact-form__input-group">
       <input class="contact-form__input contact-form__input--radio" id="salutation-mr" name="salutation" type="radio" value="Mr."/>
@@ -52,6 +56,10 @@
     </div>
     <input name="secret" type="hidden" value="1b3a9374-1a8e-434e-90ab-21aa7b9b80e7"/>
     <button class="contact-form__button" type="submit">Send It!</button>
+      <div class="upload-btn-wrapper">
+          <button type="button" class="contact-form__button">Upload a file</button>
+          <input id="uploadedFile" type="file" name="myfile"  onchange='readUploadedFileAsText(event.target)'/>
+      </div>
   </form>
 </section>
 <div class="results">
@@ -62,7 +70,22 @@
   <h2 class="results__heading">Encrypted Data</h2>
   <pre class="results__display-wrapper"><code class="results__display"></code></pre>
 </div>
+<div class="results">
+    <h2 class="results__heading">Encrypted Attachement</h2>
+    <pre class="results__display-wrapper"><code class="results__display"></code></pre>
+</div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.13.0/polyfill.min.js'></script>
+<script src="../js/openpgp.min.js"></script>
+<script src="../js/decryptText.js"></script>
+<script src="../js/encryptText.js"></script>
+<script src="../js/decryptAttachment.js"></script>
+<script src="../js/encryptAttachment.js"></script>
 <script  src="../js/formAction.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<script>
+
+</script>
 </body>
 </html>
