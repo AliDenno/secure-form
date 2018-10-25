@@ -1,50 +1,42 @@
-/**
- * Checks that an element has a non-empty `name` and `value` property.
- * @param  {Element} element  the element to check
- * @return {Bool}             true if the element is an input, false if not
- */
+var attachment = "";
+const readUploadedFileAsText = (event) => {
+    const temporaryFileReader = new FileReader();
+    $(".overlay").show();
+    return new Promise((resolve, reject) => {
+        temporaryFileReader.onerror = () => {
+        temporaryFileReader.abort();
+        reject(new DOMException("Problem parsing input file."));
+    };
+    temporaryFileReader.onload = (e) => {
+        var dataURL = e.target.result;
+        resolve(temporaryFileReader.result);
+        attachment = new Uint8Array(dataURL);
+        $(".overlay").hide();
+    };
+    temporaryFileReader.readAsArrayBuffer(event.files[0]);
+});
+};
+
+var myTEST = function() {
+    console.log(attachment)
+}
+
 var isValidElement = function isValidElement(element) {
     return element.name && element.value;
 };
 
-/**
- * Checks if an element’s value can be saved (e.g. not an unselected checkbox).
- * @param  {Element} element  the element to check
- * @return {Boolean}          true if the value should be added, false if not
- */
 var isValidValue = function isValidValue(element) {
     return !['checkbox', 'radio'].includes(element.type) || element.checked;
 };
 
-/**
- * Checks if an input is a checkbox, because checkboxes allow multiple values.
- * @param  {Element} element  the element to check
- * @return {Boolean}          true if the element is a checkbox, false if not
- */
 var isCheckbox = function isCheckbox(element) {return element.type === 'checkbox';};
 
-/**
- * Checks if an input is a `select` with the `multiple` attribute.
- * @param  {Element} element  the element to check
- * @return {Boolean}          true if the element is a multiselect, false if not
- */
 var isMultiSelect = function isMultiSelect(element) {return element.options && element.multiple;};
 
-/**
- * Retrieves the selected options from a multi-select as an array.
- * @param  {HTMLOptionsCollection} options  the options for the select
- * @return {Array}                          an array of selected option values
- */
 var getSelectValues = function getSelectValues(options) {return [].reduce.call(options, function (values, option) {
     return option.selected ? values.concat(option.value) : values;
 }, []);};
 
-
-/**
- * Retrieves input data from a form and returns it as a JSON object.
- * @param  {HTMLFormControlsCollection} elements  the form elements
- * @return {Object}                               form data as an object literal
- */
 var formToJSON = function formToJSON(elements) {return [].reduce.call(elements, function (data, element) {
     if (isValidElement(element) && isValidValue(element)) {
 
@@ -60,19 +52,61 @@ var formToJSON = function formToJSON(elements) {return [].reduce.call(elements, 
     return data;
 }, {});};
 
+function fun()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+           console.log("YE")
+        }
+    };
+    xhttp.open("GET", "http://localhost/pb/site/pbs-bw/bwajax?function=everything", true);
+    xhttp.send();
+}
+function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr){
+        xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined"){
+        xhr = new XDomainRequest();
+        xhr.open(method, url);
+    } else {
+        xhr = null;
+    }
+    return xhr;
+}
 var handleFormSubmit = function handleFormSubmit(event) {
-
     // prevent the default submit action
     event.preventDefault();
 
-    // Call our function to get the form data.
     var data = formToJSON(form.elements);
 
-    // Demo only: print the form data onscreen as a formatted JSON object.
-    var dataContainer = document.getElementsByClassName('results__display')[0];
+    var dataContainerText = document.getElementsByClassName('results__display')[0];
+    var dataContainerTextEncrypt = document.getElementsByClassName('results__display')[1];
+    var dataContainerAttachEncrypt = document.getElementsByClassName('results__display')[2];
 
-    // Use `JSON.stringify()` to make the output valid, human-readable JSON.
-    dataContainer.textContent = JSON.stringify(data, null, "  ");
+    dataContainerText.textContent = JSON.stringify(data, null, "  ");
+
+    var obj = new Object();
+    Promise.all([encryptMessage(JSON.stringify(data, null, "  ")), encryptAttachement(attachment)])
+        .then(values => {
+        obj.form = values[0];dataContainerTextEncrypt.textContent=values[0];
+        obj.file  = values[1];dataContainerAttachEncrypt.textContent=values[1];
+    console.log(obj)
+        var jsonString= JSON.stringify(obj);
+        console.log(jsonString)
+
+        var request  = createCORSRequest('get', "http://localhost/pb/site/pbs-bw/bwajax?function=secureForm&content="+encodeURIComponent(jsonString));
+        if (request){
+            request.onload = function(){
+                //do something with request.responseText
+            };
+            request.send();
+        }
+
+});
+
+
 
 };
 
