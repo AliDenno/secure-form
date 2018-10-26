@@ -1,4 +1,5 @@
 async function encryptMessage(Text) {
+    if(Text!==""){
   if(window.crypto.getRandomValues){
       const publicKeyString = `-----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: OpenPGP.js v4.1.0
@@ -17,4 +18,5 @@ async function encryptMessage(Text) {
       return result;
   }
     return "This browser does not support basic cryptography!";
+    }
 }
