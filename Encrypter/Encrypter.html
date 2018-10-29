@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" href="../Css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script>
 </script>   
 </head>
@@ -21,7 +21,8 @@
 </div>
 <div>
 <h2>Encrypt Attachement</h2>
-<input style="float:right; " type='file'  onchange='openFile(event)'><br>
+    <!--onchange='openFile(event)'-->
+<input id="uploadedFileEN" style="float:right; " type='file'  ><br>
 <button id="encryptAttachement" type="button">Encrypt</button><br/>
 <textarea id="encryptAttachementTextArea" rows="4" cols="50"></textarea>
 <br/>
@@ -30,9 +31,9 @@
 <br/>
 </div>
 </body>
-<script src="../Js/openpgp.min.js"></script>
-<script src="../Js/decryptText.js"></script>
-<script src="../Js/encryptText.js"></script>
-<script src="../Js/decryptAttachment.js"></script>
-<script src="../Js/encryptAttachment.js"></script>
+<script src="../js/openpgp.min.js"></script>
+<script src="../js/decryptText.js"></script>
+<script src="../js/encryptText.js"></script>
+<script src="../js/decryptAttachment.js"></script>
+<script src="../js/encryptAttachment.js"></script>
 </html>
