@@ -55,11 +55,13 @@
       <label class="contact-form__label contact-form__label--checkbox" for="snacks-cake">Cake</label>
     </div>
     <input name="secret" type="hidden" value="1b3a9374-1a8e-434e-90ab-21aa7b9b80e7"/>
+
     <button class="contact-form__button" type="submit">Send It!</button>
       <div class="upload-btn-wrapper">
           <button type="button" class="contact-form__button">Upload a file</button>
           <input id="uploadedFile" type="file" name="myfile"  onchange='readUploadedFileAsText(event.target)'/>
       </div>
+
   </form>
 </section>
 <div class="results">
@@ -67,20 +69,14 @@
   <pre class="results__display-wrapper"><code class="results__display"></code></pre>
 </div>
 <div class="results">
-  <h2 class="results__heading">Encrypted Data</h2>
+  <h2 class="results__heading">Encrypted Data <span id="results__heading__Size"></span></h2>
   <pre class="results__display-wrapper"><code class="results__display"></code></pre>
 </div>
 <div class="results">
-    <h2 class="results__heading">Encrypted Attachement</h2>
+    <h2 class="results__heading">Encrypted Attachement <span id="results__heading__Att__Size"></span></h2>
     <pre class="results__display-wrapper"><code class="results__display"></code></pre>
 </div>
-<div class="results">
-  <h2 class="results__heading">SIZE</h2>
-  <textarea id="mySize" rows="4" cols="50">
-</textarea>
-  <button onclick="memorySizeOf()">Size</button>
 
-</div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.13.0/polyfill.min.js'></script>
 <script src="../js/openpgp.min.js"></script>
 <script src="../js/decryptText.js"></script>
@@ -91,9 +87,5 @@
 <script  src="../js/measureSize.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-
-<script>
-
-</script>
 </body>
 </html>

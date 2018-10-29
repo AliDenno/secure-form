@@ -90,11 +90,19 @@ var handleFormSubmit = function handleFormSubmit(event) {
     var obj = new Object();
     Promise.all([encryptMessage(JSON.stringify(data, null, "  ")), encryptAttachement(attachment)])
         .then(values => {
+        if(typeof values[0] != 'undefined'){
         obj.form = values[0];dataContainerTextEncrypt.textContent=values[0];
-        obj.file  = values[1];dataContainerAttachEncrypt.textContent=values[1];
+        document.getElementById("results__heading__Size").innerHTML="- Size: "+new Blob([values[0]]).size +" bytes"
+         }
+
+        if(typeof values[1] != 'undefined'){
+            obj.file  = values[1];dataContainerAttachEncrypt.textContent=values[1];
+            document.getElementById("results__heading__Att__Size").innerHTML="- Size: "+new Blob([values[1]]).size +" bytes"
+        }
     console.log(obj)
         var jsonString= JSON.stringify(obj);
-        console.log(jsonString)
+    console.log(jsonString)
+        console.log("http://localhost/pb/site/pbs-bw/bwajax?function=secureForm&content="+encodeURIComponent(jsonString))
 
         var request  = createCORSRequest('get', "http://localhost/pb/site/pbs-bw/bwajax?function=secureForm&content="+encodeURIComponent(jsonString));
         if (request){
