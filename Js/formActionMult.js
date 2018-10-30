@@ -1,12 +1,13 @@
-var attachment = "";
 attachmentList =  [];
 function messenger(){
     var x = document.getElementById("myFiles");
     for (var i = 0; i < x.files.length; i++) {
-        readUploadedFileAsText2(x.files[i])
+        readUploadedFileAsText(x.files[i])
     }
 }
-const readUploadedFileAsText2 = (file) => {
+
+// Convert the file to binary in order to encrypt it and use a promise to confirm
+const readUploadedFileAsText = (file) => {
     const temporaryFileReader = new FileReader();
     $(".overlay").show();
     return new Promise((resolve, reject) => {
@@ -15,39 +16,15 @@ const readUploadedFileAsText2 = (file) => {
         reject(new DOMException("Problem parsing input file."));
     };
     temporaryFileReader.onload = (e) => {
-        var dataURL = e.target.result;
-        attachment = new Uint8Array(dataURL);
+        attachmentList.push({name:file.name, value:new Uint8Array(e.target.result)});
         resolve(temporaryFileReader.result);
-        var obj = {name:file.name, value:attachment};
-        attachmentList.push(obj);
         $(".overlay").hide();
     };
     temporaryFileReader.readAsArrayBuffer(file);
 });
 };
 
-const readUploadedFileAsText = (event) => {
-    const temporaryFileReader = new FileReader();
-    $(".overlay").show();
-    return new Promise((resolve, reject) => {
-        temporaryFileReader.onerror = () => {
-        temporaryFileReader.abort();
-        reject(new DOMException("Problem parsing input file."));
-    };
-    temporaryFileReader.onload = (e) => {
-        var dataURL = e.target.result;
-        resolve(temporaryFileReader.result);
-        attachment = new Uint8Array(dataURL);
-        $(".overlay").hide();
-    };
-    temporaryFileReader.readAsArrayBuffer(event.files[0]);
-});
-};
-
-var myTEST = function() {
-    console.log(attachment)
-}
-
+// Validate elements
 var isValidElement = function isValidElement(element) {
     return element.name && element.value;
 };
@@ -64,6 +41,7 @@ var getSelectValues = function getSelectValues(options) {return [].reduce.call(o
     return option.selected ? values.concat(option.value) : values;
 }, []);};
 
+// Read the form and extract name-value content
 var formToJSON = function formToJSON(elements) {return [].reduce.call(elements, function (data, element) {
     if (isValidElement(element) && isValidValue(element)) {
 
@@ -85,54 +63,61 @@ var handleFormSubmit = function handleFormSubmit(event) {
 
     var data = formToJSON(form.elements);
 
+    // Only for output
     var dataContainerText = document.getElementsByClassName('results__display')[0];
     var dataContainerTextEncrypt = document.getElementsByClassName('results__display')[1];
     var dataContainerAttachEncrypt = document.getElementsByClassName('results__display')[2];
 
+    var obj = new Object();
     var fileExtensions=[];
     var fileNames=[];
     var promises = [];
+    var encryptedFiles = [];
+    var filesSize = 0 ;
 
+    // Loop the uploaded files and save the name, and extentions
     for (var i = 0; i < attachmentList.length; i++) {
         fileExtensions.push(attachmentList[i].name.split('.').pop())
         fileNames.push(attachmentList[i].name)
         promises.push(encryptAttachement(attachmentList[i].value))
     }
+
     data.files=fileNames
-    console.log(data)
     dataContainerText.textContent = JSON.stringify(data, null, "  ");
     promises.unshift(encryptMessage(JSON.stringify(data, null, "  ")))
-    var obj = new Object();
-    var encryptedFiles = [];
+
+    // Wait for encryption then Output and send
     Promise.all(promises)
         .then(values => {
         for (i = 0; i < values.length; i++) {
-            if(typeof values[i] != 'undefined'){
-                if(i===0){
-                    obj.form = values[0];dataContainerTextEncrypt.textContent=values[0];
-                }else{
-                    encryptedFiles.push(values[i])
-                }
+        if(typeof values[i] != 'undefined'){
+            if(i===0){
+                obj.form = values[0];dataContainerTextEncrypt.textContent=values[0];
+                document.getElementById("results__heading__Size").innerHTML="- Size: "+new Blob([values[0]]).size +" bytes"
+            }else{
+                encryptedFiles.push(values[i])
+                dataContainerAttachEncrypt.textContent=dataContainerAttachEncrypt.textContent+values[i];
+                filesSize=filesSize+new Blob([values[i]]).size
+                document.getElementById("results__heading__Att__Size").innerHTML="- Size: "+ filesSize +" bytes"
             }
         }
-        if(encryptedFiles.length > 0){
-            obj.files=encryptedFiles
-        }
+    }
+    if(encryptedFiles.length > 0){
+        obj.files=encryptedFiles;
+        obj.extensions=fileExtensions;
+    }
 
-    obj.extensions=fileExtensions
-    var jsonString= JSON.stringify(obj);
-    console.log(obj)
-
-    const url = "http://localhost/pb/site/pbs-bw/bwajax?function=testFetch";
+    // Send encrypted Content to the controller
+    const url = "http://localhost/pb/site/pbs-bw/bwajax?function=secureForm";
     fetch(url, {
         method : "POST",
-        body: jsonString
+        body: JSON.stringify(obj)
 
     }).then(
-            response => response.text()
-    ).then(
-            html => console.log(html)
-    );
+        response => response.text()
+).then(
+        html => console.log(html)
+);
 });
 };
 
