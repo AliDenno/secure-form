@@ -1,6 +1,8 @@
 Benötigte Module:
 - OpenPGP.js
+
 -- Neueste Version kann gefunden werden auf: https://github.com/openpgpjs/openpgpjs
+
 -- Die folgende Datei sollte verwendet werden: dist/openpgp.min.js
 
 Datei Inhalt:
